@@ -1,40 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import setAuthToken from '../utils/setAuthToken';
 
-const Profile = (props) => {
-   const { handleLogout, user } = props;
-   const { id, name, email, exp } = user;
-   const expirationTime = new Date(exp * 1000);
-   let currentTime = Date.now();
+const Profile = () => {
+  const [profile, setProfile] = useState({ bio: '', profilePicture: '' });
 
-   // make a condition that compares exp and current time
-   if (currentTime >= expirationTime) {
-       handleLogout();
-       alert('Session has ended. Please login to continue.');
-   }
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      setAuthToken(token);
+      axios.get('/users/profile')
+        .then(res => setProfile(res.data))
+        .catch(err => console.log(err));
+    }
+  }, []);
 
-   const userData = user ?
-   (<div>
-       <h1>Profile</h1>
-       <p>Name: {name}</p>
-       <p>Email: {email}</p>
-       <p>ID: {id}</p>
-   </div>) : <h2>Loading...</h2>
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile(prevState => ({ ...prevState, [name]: value }));
+  };
 
-    const errorDiv = () => {
-        return (
-            <div className="text-center pt-4">
-                <h3>Please <Link to="/login">login</Link> to view this page</h3>
-            </div>
-        );
-    };
-    
-    return (
-        <div className="text-center pt-4">
-            {user ? userData : errorDiv()}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post('/users/profile', profile)
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err));
+  };
+
+  return (
+    <div>
+      <h2>Profile</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Bio:</label>
+          <textarea name="bio" value={profile.bio} onChange={handleChange} />
         </div>
-    );
-
-}
+        <div>
+          <label>Profile Picture URL:</label>
+          <input type="text" name="profilePicture" value={profile.profilePicture} onChange={handleChange} />
+        </div>
+        <button type="submit">Save</button>
+      </form>
+      {profile.profilePicture && <img src={profile.profilePicture} alt="Profile" />}
+    </div>
+  );
+};
 
 export default Profile;

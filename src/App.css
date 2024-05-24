@@ -1,14 +1,192 @@
-html {
-  position: relative;
-  min-height: 100%;
-}
+/* General Styles */
 body {
-  margin-bottom: 60px; /* Margin bottom by footer height */
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
+
+/* Header Styles */
+header {
+  background-color: #003366;
+  color: white;
+  padding: 1em 0;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #003366;
+  padding: 1em 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  color: white;
+  text-decoration: none;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.navbar-menu {
+  display: flex;
+}
+
+.navbar-nav {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0 1em;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.logout-link {
+  cursor: pointer;
+}
+
+/* Main Content */
+main {
+  padding: 2em;
+}
+
+section {
+  margin-bottom: 2em;
+}
+
+h2 {
+  color: #003366;
+}
+
+p {
+  line-height: 1.6;
+}
+
+/* Forms */
+form {
+  background-color: white;
+  padding: 2em;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
   width: 100%;
-  height: 60px; /* Set the fixed height of the footer here */
-  line-height: 60px; /* Vertically center the text there */
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #0055a5;
+  color: white;
+  padding: 0.5em 2em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+form button:hover {
+  background-color: #003366;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #003366;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Media Queries for Tablet and Mobile */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-brand {
+    margin-bottom: 1em;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-item {
+    margin: 0.5em 0;
+  }
+
+  main {
+    padding: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5em;
+  }
+
+  .navbar-brand {
+    font-size: 1.2em;
+  }
+
+  form {
+    padding: 1em;
+  }
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"] {
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  form button {
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+  }
 }
