@@ -70,6 +70,36 @@ header h1 {
   cursor: pointer;
 }
 
+
+.about-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-container h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #003366;
+}
+
+.about-container h2 {
+  font-size: 2em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #0055a5;
+}
+
+.about-container p {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #333;
+}
+
 /* Main Content */
 main {
   padding: 2em;

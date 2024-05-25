@@ -31,7 +31,7 @@ const Login = (props) => {
         const decoded = jwt_decode(token);
         props.nowCurrentUser(decoded);
         props.setIsAuthenticated(true);
-        setRedirectToProfile(true);
+        setRedirectToProfile(true); // Set redirect to true
       })
       .catch((error) => {
         console.error('Error logging in', error.response.data);
@@ -39,7 +39,9 @@ const Login = (props) => {
       });
   };
 
-  if (redirectToProfile) return <Redirect to="/profile" />;
+  if (redirectToProfile) {
+    return <Redirect to="/profile" />;
+  }
 
   return (
     <div className="row mt-4">

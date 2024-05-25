@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 
+
 const Profile = () => {
   const [profile, setProfile] = useState({ bio: '', profilePicture: '', email: '', _id: '' });
   const [showPictureForm, setShowPictureForm] = useState(false);
+  const [showBioForm, setShowBioForm] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
       setAuthToken(token);
-      axios.get('http://localhost:8000/users/profile')  // Ensure the correct URL and port
+      axios.get('http://localhost:8000/users/profile')
         .then(res => {
           const userProfile = res.data.profile ? { ...res.data.profile, email: res.data.email, _id: res.data._id } : { email: res.data.email, _id: res.data._id };
           setProfile(userProfile);
@@ -26,16 +28,22 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8000/users/profile', { bio: profile.bio, profilePicture: profile.profilePicture })  // Ensure the correct URL and port
+    axios.post('http://localhost:8000/users/profile', { bio: profile.bio, profilePicture: profile.profilePicture })
       .then(res => {
         const userProfile = res.data.profile ? { ...res.data.profile, email: res.data.email, _id: res.data._id } : { email: res.data.email, _id: res.data._id };
         setProfile(userProfile);
+        setShowPictureForm(false);
+        setShowBioForm(false);
       })
       .catch(err => console.log(err));
   };
 
   const togglePictureForm = () => {
     setShowPictureForm(prevState => !prevState);
+  };
+
+  const toggleBioForm = () => {
+    setShowBioForm(prevState => !prevState);
   };
 
   return (
@@ -72,17 +80,27 @@ const Profile = () => {
         <div className="bio-section">
           <h3>Bio:</h3>
           <p>{profile.bio}</p>
+          {profile.bio ? (
+            <button onClick={toggleBioForm} className="toggle-button">
+              {showBioForm ? 'Hide' : 'Change Bio'}
+            </button>
+          ) : (
+            <button onClick={toggleBioForm} className="toggle-button">
+              Add Bio
+            </button>
+          )}
         </div>
       </div>
 
-      <h2>Edit Bio</h2>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div>
-          <label>Bio:</label>
-          <textarea name="bio" value={profile.bio} onChange={handleChange} />
-        </div>
-        <button type="submit">Save</button>
-      </form>
+      {showBioForm && (
+        <form onSubmit={handleSubmit} className="profile-form">
+          <div>
+            <label>Bio:</label>
+            <textarea name="bio" value={profile.bio} onChange={handleChange} />
+          </div>
+          <button type="submit">Save</button>
+        </form>
+      )}
     </div>
   );
 };
