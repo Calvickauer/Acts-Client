@@ -1,4 +1,3 @@
-// Imports
 import React, { useState } from 'react';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -10,6 +9,7 @@ const { REACT_APP_SERVER_URL } = process.env;
 const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [redirectToProfile, setRedirectToProfile] = useState(false);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -31,6 +31,7 @@ const Login = (props) => {
         const decoded = jwt_decode(token);
         props.nowCurrentUser(decoded);
         props.setIsAuthenticated(true);
+        setRedirectToProfile(true);
       })
       .catch((error) => {
         console.error('Error logging in', error.response.data);
@@ -38,7 +39,7 @@ const Login = (props) => {
       });
   };
 
-  if (props.user) return <Redirect to="/profile" />;
+  if (redirectToProfile) return <Redirect to="/profile" />;
 
   return (
     <div className="row mt-4">

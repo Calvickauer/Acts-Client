@@ -6,7 +6,7 @@ const Messaging = ({ user }) => {
   const [newMessage, setNewMessage] = useState({ recipient: '', content: '' });
 
   useEffect(() => {
-    if (user) {
+    if (user && user._id) {
       axios.get(`/messages/${user._id}`)
         .then(res => setMessages(res.data))
         .catch(err => console.log(err));
@@ -30,26 +30,27 @@ const Messaging = ({ user }) => {
       <h2>Messages</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Recipient ID:</### Finalizing the Core Features Implementation
+          <label>Recipient ID:</label>
+          <input type="text" name="recipient" value={newMessage.recipient} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Message:</label>
+          <textarea name="content" value={newMessage.content} onChange={handleChange} />
+        </div>
+        <button type="submit">Send</button>
+      </form>
+      <ul>
+        {messages.map(msg => (
+          <li key={msg._id}>
+            <p><strong>From:</strong> {msg.sender.name} ({msg.sender.email})</p>
+            <p><strong>To:</strong> {msg.recipient.name} ({msg.recipient.email})</p>
+            <p><strong>Message:</strong> {msg.content}</p>
+            <p><strong>Date:</strong> {new Date(msg.date).toLocaleString()}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-Here's the complete setup for the Messaging System, including both the backend routes and the frontend component. 
-
-### Messaging System
-
-#### Backend
-
-**Message Model (`models/message.js`):**
-
-```javascript
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-
-const messageSchema = new Schema({
-  sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  recipient: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  content: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-});
-
-const Message = mongoose.model('Message', messageSchema);
-module.exports = Message;
+export default Messaging;

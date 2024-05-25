@@ -3,14 +3,18 @@ import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 
 const Profile = () => {
-  const [profile, setProfile] = useState({ bio: '', profilePicture: '' });
+  const [profile, setProfile] = useState({ bio: '', profilePicture: '', email: '', _id: '' });
+  const [showPictureForm, setShowPictureForm] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
       setAuthToken(token);
-      axios.get('/users/profile')
-        .then(res => setProfile(res.data))
+      axios.get('http://localhost:8000/users/profile')  // Ensure the correct URL and port
+        .then(res => {
+          const userProfile = res.data.profile ? { ...res.data.profile, email: res.data.email, _id: res.data._id } : { email: res.data.email, _id: res.data._id };
+          setProfile(userProfile);
+        })
         .catch(err => console.log(err));
     }
   }, []);
@@ -22,26 +26,63 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/users/profile', profile)
-      .then(res => console.log(res.data))
+    axios.post('http://localhost:8000/users/profile', { bio: profile.bio, profilePicture: profile.profilePicture })  // Ensure the correct URL and port
+      .then(res => {
+        const userProfile = res.data.profile ? { ...res.data.profile, email: res.data.email, _id: res.data._id } : { email: res.data.email, _id: res.data._id };
+        setProfile(userProfile);
+      })
       .catch(err => console.log(err));
   };
 
+  const togglePictureForm = () => {
+    setShowPictureForm(prevState => !prevState);
+  };
+
   return (
-    <div>
+    <div className="profile-container">
       <h2>Profile</h2>
-      <form onSubmit={handleSubmit}>
+      {profile.profilePicture ? (
+        <div className="profile-picture-section">
+          <img src={profile.profilePicture} alt="Profile" className="profile-picture" />
+          <button onClick={togglePictureForm} className="toggle-button">
+            {showPictureForm ? 'Hide' : 'Change Profile Picture'}
+          </button>
+        </div>
+      ) : (
+        <div className="profile-picture-section">
+          <button onClick={togglePictureForm} className="toggle-button">
+            Add Profile Picture
+          </button>
+        </div>
+      )}
+
+      {showPictureForm && (
+        <form onSubmit={handleSubmit} className="profile-form">
+          <div>
+            <label>Profile Picture URL:</label>
+            <input type="text" name="profilePicture" value={profile.profilePicture} onChange={handleChange} />
+          </div>
+          <button type="submit">Save</button>
+        </form>
+      )}
+
+      <div className="profile-details">
+        <h3>Email: {profile.email}</h3>
+        <h3>User ID: {profile._id}</h3>
+        <div className="bio-section">
+          <h3>Bio:</h3>
+          <p>{profile.bio}</p>
+        </div>
+      </div>
+
+      <h2>Edit Bio</h2>
+      <form onSubmit={handleSubmit} className="profile-form">
         <div>
           <label>Bio:</label>
           <textarea name="bio" value={profile.bio} onChange={handleChange} />
         </div>
-        <div>
-          <label>Profile Picture URL:</label>
-          <input type="text" name="profilePicture" value={profile.profilePicture} onChange={handleChange} />
-        </div>
         <button type="submit">Save</button>
       </form>
-      {profile.profilePicture && <img src={profile.profilePicture} alt="Profile" />}
     </div>
   );
 };
