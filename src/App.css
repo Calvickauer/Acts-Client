@@ -1,3 +1,4 @@
+
 /* General Styles */
 body {
   font-family: Arial, sans-serif;
@@ -70,7 +71,7 @@ header h1 {
   cursor: pointer;
 }
 
-
+/* About Page Styles */
 .about-container {
   padding: 20px;
   max-width: 800px;
@@ -220,6 +221,8 @@ footer p {
     font-size: 0.9em;
   }
 }
+
+/* Profile Page Styles */
 .profile-container {
   max-width: 600px;
   margin: 0 auto;
@@ -292,9 +295,119 @@ footer p {
   background-color: #003366;
 }
 
-.bio-section {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #f4f4f4;
+/* Messages Page Styles */
+.messages-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.messages-container h2 {
+  color: #003366;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.threads-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
   border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.thread-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.thread-item:last-child {
+  border-bottom: none;
+}
+
+.thread-item:hover {
+  background-color: #f1f1f1;
+}
+
+.current-thread {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.message-item {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+.message-item p {
+  margin: 5px 0;
+}
+
+.message-item strong {
+  color: #003366;
+}
+
+.message-date {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.message-form {
+  margin-bottom: 20px;
+}
+
+.message-form .form-group {
+  margin-bottom: 10px;
+}
+
+.message-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.message-form input[type="text"],
+.message-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.message-form button {
+  background-color: #0055a5;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.message-form button:hover {
+  background-color: #003366;
+}
+
+.reply-button {
+  background-color: #0055a5;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reply-button:hover {
+  background-color: #003366;
 }
