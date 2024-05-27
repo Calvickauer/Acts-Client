@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Messaging = ({ user }) => {
+const Messages = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState({ recipient: '', content: '' });
 
   useEffect(() => {
-    if (user) {
-      axios.get(`/messages/${user._id}`)
+    console.log('User in useEffect:', user); // Debugging log
+    if (user && user.id) {
+      axios.get(`http://localhost:8000/messages/${user.id}`)
         .then(res => setMessages(res.data))
         .catch(err => console.log(err));
     }
@@ -20,9 +21,19 @@ const Messaging = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/messages', { ...newMessage, sender: user._id })
-      .then(res => setMessages([...messages, res.data]))
-      .catch(err => console.log(err));
+    if (!user || !user.id) {
+      console.error('User is not defined');
+      return;
+    }
+
+    axios.post('http://localhost:8000/messages', { ...newMessage, sender: user.id })
+      .then(res => {
+        setMessages([...messages, res.data]);
+        setNewMessage({ recipient: '', content: '' }); // Clear the form
+      })
+      .catch(err => {
+        console.error('Error sending message:', err);
+      });
   };
 
   return (
@@ -53,4 +64,4 @@ const Messaging = ({ user }) => {
   );
 };
 
-export default Messaging;
+export default Messages;

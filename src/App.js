@@ -8,7 +8,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Welcome from './components/Welcome';
 import About from './components/About';
-// import Messages from './components/Messages';
+import Messages from './components/Messages';
 import './App.css';
 
 const App = () => {
@@ -57,7 +57,12 @@ const App = () => {
           />
           <Route exact path="/" component={Welcome} />
           <Route path="/about" component={About} />
-          {/* <Route path="/messages" component={Messages} /> */}
+          <Route 
+            path="/messages"
+            render={(props) => (
+              isAuthenticated ? <Messages {...props} user={user} /> : <Redirect to="/login" />
+            )}
+          />
         </Switch>
       </div>
     </Router>
