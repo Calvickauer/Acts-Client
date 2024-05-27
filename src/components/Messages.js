@@ -5,7 +5,8 @@ const Messages = ({ user }) => {
   const [threads, setThreads] = useState({});
   const [currentThreadId, setCurrentThreadId] = useState(null);
   const [newMessage, setNewMessage] = useState({ recipient: '', content: '' });
-  const [replyTo, setReplyTo] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [showMessageForm, setShowMessageForm] = useState(false);
 
   useEffect(() => {
     if (user && user.id) {
@@ -27,7 +28,7 @@ const Messages = ({ user }) => {
       return;
     }
 
-    const threadId = replyTo ? replyTo.threadId : `${user.id}-${newMessage.recipient}`;
+    const threadId = `${user.id}-${newMessage.recipient}`;
     const messageData = { ...newMessage, sender: user.id, threadId };
 
     axios.post('http://localhost:8000/messages', messageData)
@@ -41,19 +42,45 @@ const Messages = ({ user }) => {
           return updatedThreads;
         });
         setNewMessage({ recipient: '', content: '' }); // Clear the form
-        setReplyTo(null);
         setCurrentThreadId(threadId); // Set the current thread to the new or replied thread
+        setShowMessageForm(false); // Hide the form
       })
       .catch(err => console.error('Error sending message:', err));
   };
 
-  const handleReply = (message) => {
-    setReplyTo(message);
-    setNewMessage({ ...newMessage, recipient: message.sender._id });
-  };
-
   const handleThreadClick = (threadId) => {
     setCurrentThreadId(threadId);
+  };
+
+  const handleReplyChange = (e) => {
+    setReplyContent(e.target.value);
+  };
+
+  const handleReplySubmit = (e, threadId) => {
+    e.preventDefault();
+    if (!user || !user.id || !replyContent.trim()) {
+      console.error('User is not defined or reply content is empty');
+      return;
+    }
+
+    const lastMessage = threads[threadId][threads[threadId].length - 1];
+    const messageData = {
+      recipient: lastMessage.sender._id === user.id ? lastMessage.recipient._id : lastMessage.sender._id,
+      content: replyContent,
+      sender: user.id,
+      threadId
+    };
+
+    axios.post('http://localhost:8000/messages', messageData)
+      .then(res => {
+        setThreads(prevThreads => {
+          const updatedThreads = { ...prevThreads };
+          updatedThreads[threadId].push(res.data);
+          return updatedThreads;
+        });
+        setReplyContent(''); // Clear the reply form
+      })
+      .catch(err => console.error('Error sending reply:', err));
   };
 
   const getOtherPersonName = (thread) => {
@@ -75,42 +102,63 @@ const Messages = ({ user }) => {
 
   return (
     <div className="messages-container">
-      <form className="message-form" onSubmit={handleSubmit}>
-        {replyTo && (
-          <div className="replying-to">
-            <p><strong>Replying to:</strong> {replyTo.sender.name}</p>
-            <p><strong>Message:</strong> {replyTo.content}</p>
+      <button className='reply-id' onClick={() => setShowMessageForm(true)}>Message by Recipient ID</button>
+      {showMessageForm && (
+        <form className="message-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Recipient ID:</label>
+            <input
+              type="text"
+              name="recipient"
+              value={newMessage.recipient}
+              onChange={handleChange}
+            />
           </div>
-        )}
-        <div className="form-group">
-          <label>Recipient ID:</label>
-          <input type="text" name="recipient" value={newMessage.recipient} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Message:</label>
-          <textarea name="content" value={newMessage.content} onChange={handleChange} />
-        </div>
-        <button type="submit">Send</button>
-      </form>
-      <h2>Messages</h2>
-      <div className="threads-list">
-        {sortedThreadIds.map(threadId => (
-          <div key={threadId} className="thread-item" onClick={() => handleThreadClick(threadId)}>
-            <p>Thread with {getOtherPersonName(threads[threadId])}</p>
-            <p className="last-message-date">Last message: {getLastMessageDate(threads[threadId])}</p>
+          <div className="form-group">
+            <label>Message:</label>
+            <textarea
+              name="content"
+              value={newMessage.content}
+              onChange={handleChange}
+            />
           </div>
-        ))}
-      </div>
-      {currentThreadId && (
-        <div className="current-thread">
-          {threads[currentThreadId].slice().reverse().map(msg => (
-            <div key={msg._id} className="message-item">
-              <p><strong>{msg.sender.name}:</strong> {msg.content}</p>
-              <p className="message-date">{new Date(msg.date).toLocaleString()}</p>
-              <button className="reply-button" onClick={() => handleReply(msg)}>Reply</button>
+          <button className='send-id' type="submit">Send</button>
+          <button className='cancel-id' type="button" onClick={() => setShowMessageForm(false)}>Cancel</button>
+        </form>
+      )}
+      {!showMessageForm && (
+        <>
+          <h2>Messages</h2>
+          <div className="threads-list">
+            {sortedThreadIds.map(threadId => (
+              <div key={threadId} className="thread-item" onClick={() => handleThreadClick(threadId)}>
+                <p>Conversation with {getOtherPersonName(threads[threadId])}</p>
+                <p className="last-message-date">Last message: {getLastMessageDate(threads[threadId])}</p>
+              </div>
+            ))}
+          </div>
+          {currentThreadId && (
+            <div className='thread-reply'>
+              <div className="current-thread">
+                {threads[currentThreadId].slice().reverse().map(msg => (
+                  <div key={msg._id} className="message-item">
+                    <p><strong>{msg.sender.name}:</strong> {msg.content}</p>
+                    <p className="message-date">{new Date(msg.date).toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
+              <form className="thread-reply-form" onSubmit={(e) => handleReplySubmit(e, currentThreadId)}>
+                <textarea
+                  name="replyContent"
+                  value={replyContent}
+                  onChange={handleReplyChange}
+                  placeholder="Type your reply here..."
+                />
+                <button type="submit">Send Reply</button>
+              </form>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );

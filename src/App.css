@@ -297,55 +297,44 @@ footer p {
 
 /* Messages Page Styles */
 .messages-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.messages-container h2 {
-  color: #003366;
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .threads-list {
-  max-height: 200px;
-  overflow-y: auto;
+  flex: 1;
+  max-width: 300px;
+  max-height: 400px;
+  min-width: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden; /* To avoid horizontal scrollbar */
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-bottom: 20px;
+  padding: 10px;
 }
 
 .thread-item {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.thread-item:last-child {
-  border-bottom: none;
-}
-
-.thread-item:hover {
-  background-color: #f1f1f1;
+  background-color: #ffffff;
+  padding: 5px;
+  border-bottom: 1px solid black;
 }
 
 .current-thread {
-  max-height: 500px;
-  max-width: 600px;
-  min-width: 400px;
-  overflow-y: auto;
+  flex: 2;
+  max-height: 150px;
+  overflow-y: scroll;
+  overflow-x: hidden; /* To avoid horizontal scrollbar */
   border: 1px solid #ddd;
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .message-item {
   padding: 15px;
   border-bottom: 1px solid #ddd;
+  background-color: rgba(216, 215, 215, 0.567);
+  font-weight: bold;
 }
 
 .message-item:last-child {
@@ -362,11 +351,13 @@ footer p {
 
 .message-date {
   font-size: 0.8em;
-  color: #888;
+  color: #006412;
 }
 
 .message-form {
   margin-bottom: 20px;
+  max-height: 400px;
+  border: 1px solid black;
 }
 
 .message-form .form-group {
@@ -389,8 +380,6 @@ footer p {
 }
 
 .message-form button {
-  background-color: #0055a5;
-  color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
@@ -402,7 +391,7 @@ footer p {
 }
 
 .reply-button {
-  background-color: #0055a5;
+  background-color: #0084ff;
   color: white;
   padding: 5px 10px;
   border: none;
@@ -411,5 +400,56 @@ footer p {
 }
 
 .reply-button:hover {
+  background-color: #003366;
+}
+
+.reply-id{
+  max-width: fit-content;
+  max-height: 50px;
+}
+
+.send-id{
+  margin-right: 5px;
+}
+
+.cancel-id{
+  margin-left: 5px;
+  background-color: rgba(255, 0, 0, 0.642);
+  font-weight: bolder;
+  color: black;
+}
+
+.thread-reply-form {
+  display: flex;
+  flex-direction: column;
+  max-height: fit-content;
+  width: 300px;
+  background-color: rgb(69, 82, 169);
+  padding: 5px;
+
+}
+
+.thread-reply-form textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.thread-reply-form button {
+  background-color: #0084ff;
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+  overflow-x: none;
+  width:fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.thread-reply-form button:hover {
   background-color: #003366;
 }
