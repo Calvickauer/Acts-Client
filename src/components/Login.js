@@ -31,7 +31,7 @@ const Login = (props) => {
         const decoded = jwt_decode(token);
         props.nowCurrentUser(decoded);
         props.setIsAuthenticated(true);
-        setRedirectToProfile(true); // Set redirect to true
+        setRedirectToProfile(true);
       })
       .catch((error) => {
         console.error('Error logging in', error.response.data);
@@ -44,36 +44,34 @@ const Login = (props) => {
   }
 
   return (
-    <div className="row mt-4">
-      <div className="col-md-7 offset-md-3">
-        <div className="card card-body">
-          <h2 className="py-2">Login</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={handleEmail}
-                className="form-control"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={handlePassword}
-                className="form-control"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary float-right">
-              Submit
-            </button>
-          </form>
-        </div>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={handleEmail}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={handlePassword}
+              className="form-input"
+            />
+          </div>
+          <button type="submit" className="btn-submit">
+            Submit
+          </button>
+        </form>
       </div>
     </div>
   );
