@@ -335,6 +335,8 @@ footer p {
 
 .current-thread {
   max-height: 500px;
+  max-width: 600px;
+  min-width: 400px;
   overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 4px;

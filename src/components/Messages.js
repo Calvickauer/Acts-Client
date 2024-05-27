@@ -8,7 +8,6 @@ const Messages = ({ user }) => {
   const [replyTo, setReplyTo] = useState(null);
 
   useEffect(() => {
-    console.log('User in useEffect:', user); // Debugging log
     if (user && user.id) {
       axios.get(`http://localhost:8000/messages/${user.id}`)
         .then(res => setThreads(res.data))
@@ -63,6 +62,17 @@ const Messages = ({ user }) => {
     return otherPerson?.name || 'Unknown';
   };
 
+  const getLastMessageDate = (thread) => {
+    if (!thread || thread.length === 0) return '';
+    return new Date(thread[thread.length - 1].date).toLocaleString();
+  };
+
+  const sortedThreadIds = Object.keys(threads).sort((a, b) => {
+    const lastMessageA = threads[a][threads[a].length - 1];
+    const lastMessageB = threads[b][threads[b].length - 1];
+    return new Date(lastMessageB.date) - new Date(lastMessageA.date);
+  });
+
   return (
     <div className="messages-container">
       <form className="message-form" onSubmit={handleSubmit}>
@@ -84,15 +94,16 @@ const Messages = ({ user }) => {
       </form>
       <h2>Messages</h2>
       <div className="threads-list">
-        {Object.keys(threads).map(threadId => (
+        {sortedThreadIds.map(threadId => (
           <div key={threadId} className="thread-item" onClick={() => handleThreadClick(threadId)}>
             <p>Thread with {getOtherPersonName(threads[threadId])}</p>
+            <p className="last-message-date">Last message: {getLastMessageDate(threads[threadId])}</p>
           </div>
         ))}
       </div>
       {currentThreadId && (
         <div className="current-thread">
-          {threads[currentThreadId].map(msg => (
+          {threads[currentThreadId].slice().reverse().map(msg => (
             <div key={msg._id} className="message-item">
               <p><strong>{msg.sender.name}:</strong> {msg.content}</p>
               <p className="message-date">{new Date(msg.date).toLocaleString()}</p>
