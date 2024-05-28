@@ -563,3 +563,39 @@ footer p {
 .thread-reply-form button:hover {
   background-color: #003366;
 }
+
+/* Retreats Page Styles */
+.retreats-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.retreats-container h2 {
+  color: #003366;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.retreats-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.retreats-container li {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.retreats-container li h3 {
+  margin: 0 0 10px;
+  color: #0055a5;
+}
+
+.retreats-container li p {
+  margin: 0 0 5px;
+  color: #333;
+}

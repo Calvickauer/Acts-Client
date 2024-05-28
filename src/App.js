@@ -9,6 +9,7 @@ import Signup from './components/Signup';
 import Welcome from './components/Welcome';
 import About from './components/About';
 import Messages from './components/Messages';
+import Retreats from './components/Retreats';
 import './App.css';
 
 const App = () => {
@@ -63,6 +64,7 @@ const App = () => {
               isAuthenticated ? <Messages {...props} user={user} /> : <Redirect to="/login" />
             )}
           />
+          <Route path="/retreats" component={Retreats} />
         </Switch>
       </div>
     </Router>
