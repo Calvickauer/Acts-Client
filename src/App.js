@@ -23,12 +23,14 @@ const App = () => {
       const decoded = jwt_decode(token);
       setUser(decoded);
       setIsAuthenticated(true);
+      console.log('User set in App:', decoded); // Log user object
     }
   }, []);
 
   const nowCurrentUser = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
+    console.log('Current user set:', userData); // Log user data
   };
 
   const handleLogout = () => {
@@ -64,7 +66,13 @@ const App = () => {
               isAuthenticated ? <Messages {...props} user={user} /> : <Redirect to="/login" />
             )}
           />
-          <Route path="/retreats" component={Retreats} />
+          <Route 
+            path="/retreats"
+            render={(props) => {
+              console.log('Rendering Retreats with user:', user); // Log user passed to Retreats
+              return isAuthenticated ? <Retreats {...props} user={user} /> : <Redirect to="/login" />;
+            }}
+          />
         </Switch>
       </div>
     </Router>

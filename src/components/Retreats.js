@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Retreats = () => {
+const Retreats = ({ user }) => {
   const [retreats, setRetreats] = useState([]);
   const [filteredRetreats, setFilteredRetreats] = useState([]);
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
 
   useEffect(() => {
+    console.log("Retreats component mounted with user:", user); // Log user on component mount
+
     const fetchRetreats = async () => {
       try {
         console.log("Calling scrape endpoint");
@@ -23,7 +25,7 @@ const Retreats = () => {
     };
 
     fetchRetreats();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     let filtered = retreats;
@@ -49,6 +51,16 @@ const Retreats = () => {
     }
     citiesByState[state].add(city);
   });
+
+  const addToProfile = async (retreatId) => {
+    try {
+      console.log("Adding retreat to profile", { userId: user.id, retreatId });
+      const response = await axios.post('http://localhost:8000/retreats/add-to-profile', { userId: user.id, retreatId });
+      console.log("Retreat added to profile:", response.data);
+    } catch (error) {
+      console.error("Error adding retreat to profile:", error);
+    }
+  };
 
   return (
     <div className="retreats-container">
@@ -93,6 +105,7 @@ const Retreats = () => {
               <div className="retreat-location">Location: {retreat.location}</div>
               <div className="retreat-type">{retreat.retreatType}</div>
               <div className="retreat-language">{retreat.language}</div>
+              <button onClick={() => addToProfile(retreat._id)}>Add to Profile</button>
             </div>
           ))
         ) : (
