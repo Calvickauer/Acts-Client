@@ -123,6 +123,12 @@ header h1 {
   color: #555;
 }
 
+.profile-retreats{
+  padding: 10px;
+  margin: auto;
+  border-bottom: 1px solid blueviolet;
+}
+
 
 
 .location-group {

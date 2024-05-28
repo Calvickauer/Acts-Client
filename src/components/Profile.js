@@ -6,7 +6,6 @@ const Profile = () => {
   const [profile, setProfile] = useState({ bio: '', profilePicture: '', email: '', _id: '', retreats: [] });
   const [showPictureForm, setShowPictureForm] = useState(false);
   const [showBioForm, setShowBioForm] = useState(false);
-  console.log("retreats linked to profile:", profile.retreats);
 
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
@@ -14,7 +13,6 @@ const Profile = () => {
       setAuthToken(token);
       axios.get('http://localhost:8000/users/profile')
         .then(res => {
-          console.log('Profile data fetched:', res.data); // Log the fetched profile data
           const userProfile = res.data.profile ? { ...res.data.profile, email: res.data.email, _id: res.data._id, retreats: res.data.retreats } : { email: res.data.email, _id: res.data._id, retreats: res.data.retreats };
           setProfile(userProfile);
         })
@@ -104,16 +102,14 @@ const Profile = () => {
       )}
 
       <div className="retreats-section">
-        <h3>Added Retreats:</h3>
+        <h3>Your Retreats:</h3>
         {profile.retreats.length > 0 ? (
-          <ul>
+          <ul className='profile-retreats'>
             {profile.retreats.map(retreat => (
               <li key={retreat._id}>
                 <h4>{retreat.title}</h4>
                 <p>{retreat.location}</p>
                 <p>{retreat.date}</p>
-                <p>{retreat.retreatType}</p>
-                <p>{retreat.language}</p>
               </li>
             ))}
           </ul>
