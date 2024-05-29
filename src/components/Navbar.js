@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 
 const Navbar = (props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="navbar">
       <div className="container">
         <Link className="navbar-brand" to="/">
           <img src="/ActsLogo.png" alt="ACTS Logo" className="logo" />
         </Link>
-        <div className="navbar-menu">
+        <button className="hamburger" onClick={toggleMenu}>
+          <span className="hamburger-icon">&#9776;</span>
+        </button>
+        <div className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
           <ul className="navbar-nav">
             <li className="nav-item">
               <NavLink className="nav-link" exact to="/">Home</NavLink>

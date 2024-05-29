@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // Import useHistory for redirection
 
 const Retreats = ({ user }) => {
   const [retreats, setRetreats] = useState([]);
   const [filteredRetreats, setFilteredRetreats] = useState([]);
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
+  const history = useHistory(); // Initialize the history function
 
   useEffect(() => {
     console.log("Retreats component mounted with user:", user); // Log user on component mount
@@ -57,6 +59,7 @@ const Retreats = ({ user }) => {
       console.log("Adding retreat to profile", { userId: user.id, retreatId });
       const response = await axios.post('http://localhost:8000/retreats/add-to-profile', { userId: user.id, retreatId });
       console.log("Retreat added to profile:", response.data);
+      history.push('/profile'); // Redirect to the profile page after adding retreat
     } catch (error) {
       console.error("Error adding retreat to profile:", error);
     }
