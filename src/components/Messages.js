@@ -41,9 +41,9 @@ const Messages = ({ user }) => {
           updatedThreads[threadId].push(res.data);
           return updatedThreads;
         });
-        setNewMessage({ recipient: '', content: '' }); // Clear the form
-        setCurrentThreadId(threadId); // Set the current thread to the new or replied thread
-        setShowMessageForm(false); // Hide the form
+        setNewMessage({ recipient: '', content: '' });
+        setCurrentThreadId(threadId);
+        setShowMessageForm(false);
       })
       .catch(err => console.error('Error sending message:', err));
   };
@@ -78,7 +78,7 @@ const Messages = ({ user }) => {
           updatedThreads[threadId].push(res.data);
           return updatedThreads;
         });
-        setReplyContent(''); // Clear the reply form
+        setReplyContent('');
       })
       .catch(err => console.error('Error sending reply:', err));
   };

@@ -1,32 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom'; // Import useHistory for redirection
+import { useHistory } from 'react-router-dom';
 
-const Retreats = ({ user }) => {
+const Retreats = ({ user, setUser }) => {
   const [retreats, setRetreats] = useState([]);
   const [filteredRetreats, setFilteredRetreats] = useState([]);
   const [selectedState, setSelectedState] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
-  const history = useHistory(); // Initialize the history function
+  const history = useHistory();
 
   useEffect(() => {
-    console.log("Retreats component mounted with user:", user); // Log user on component mount
+    let isMounted = true;
 
     const fetchRetreats = async () => {
       try {
-        console.log("Calling scrape endpoint");
         await axios.post('http://localhost:8000/retreats/scrape');
-        console.log("Scrape completed, fetching retreats");
         const response = await axios.get('http://localhost:8000/retreats');
-        setRetreats(response.data);
-        setFilteredRetreats(response.data);
-        console.log("Retreats fetched:", response.data);
+        if (isMounted) {
+          console.log('Fetched retreats:', response.data); 
+          setRetreats(response.data);
+          setFilteredRetreats(response.data);
+        }
       } catch (error) {
-        console.error("Error fetching retreats:", error);
+        if (isMounted) {
+          console.error("Error fetching retreats:", error);
+        }
       }
     };
 
-    fetchRetreats();
+    if (user) {
+      fetchRetreats();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
 
   useEffect(() => {
@@ -56,10 +64,12 @@ const Retreats = ({ user }) => {
 
   const addToProfile = async (retreatId) => {
     try {
-      console.log("Adding retreat to profile", { userId: user.id, retreatId });
-      const response = await axios.post('http://localhost:8000/retreats/add-to-profile', { userId: user.id, retreatId });
-      console.log("Retreat added to profile:", response.data);
-      history.push('/profile'); // Redirect to the profile page after adding retreat
+      await axios.post('http://localhost:8000/retreats/add-to-profile', { userId: user.id, retreatId });
+      setUser(prevUser => ({
+        ...prevUser,
+        retreats: Array.isArray(prevUser.retreats) ? [...prevUser.retreats, retreatId] : [retreatId]
+      }));
+      history.push('/profile');
     } catch (error) {
       console.error("Error adding retreat to profile:", error);
     }
